@@ -11,6 +11,16 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="members for wrongdoing. "))
 
 @client.event
+async def on_message(message):
+    if not message.author.bot:
+        if client.get_channel(1009615628266647714):
+            log_message = f"**{message.author}** sent a message in **{message.channel}**: \n{message.content}"
+            await client.get_channel(1009615628266647714).send(log_message)
+        else:
+            print(f"Error: message_logs_channel could not be found")
+    await client.process_commands(message)
+
+@client.event
 async def on_message_edit(before, after):
     if before.content != after.content:
         log_message = f"**{before.author}** edited a message in **{before.channel}**: \nBefore: {before.content}\nAfter: {after.content}"
@@ -21,7 +31,7 @@ async def on_message_delete(message):
     log_message = f"**{message.author}** deleted a message in **{message.channel}**: {message.content}"
     await client.get_channel(1009616511687741510).send(log_message)
 
-@slash.slash(name='clear', description='Clear the chat', options=[create_option(name='amount', description='The number of messages to delete', option_type=4, required=False)])
+@slash.slash(name='delete', description='Clear the chat', options=[create_option(name='amount', description='The number of messages to delete', option_type=4, required=False)])
 async def _clear(ctx, amount=5):
     await ctx.channel.purge(limit=amount)
     clearmsg = f"**{ctx.author}** cleared **{amount}** messages in **{ctx.channel}**."
