@@ -12,10 +12,11 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    message_logs_channel = discord.utils.get(message.guild.channels, name='message-logs')
     if not message.author.bot:
-        if client.get_channel(1009615628266647714):
+        if message_logs_channel:
             log_message = f"**{message.author}** sent a message in **{message.channel}**: \n{message.content}"
-            await client.get_channel(1009615628266647714).send(log_message)
+            await message_logs_channel.send(log_message)
         else:
             print(f"Error: message_logs_channel could not be found")
     await client.process_commands(message)
@@ -24,12 +25,12 @@ async def on_message(message):
 async def on_message_edit(before, after):
     if before.content != after.content:
         log_message = f"**{before.author}** edited a message in **{before.channel}**: \nBefore: {before.content}\nAfter: {after.content}"
-        await client.get_channel(1009619210843996340).send(log_message)
+        await discord.utils.get(before.guild.channels, name='edit-logs').send(log_message)
 
 @client.event
 async def on_message_delete(message):
     log_message = f"**{message.author}** deleted a message in **{message.channel}**: {message.content}"
-    await client.get_channel(1009616511687741510).send(log_message)
+    await discord.utils.get(message.guild.channels, name='delete-logs').send(log_message)
 
 @slash.slash(name='delete', description='Clear the chat', options=[create_option(name='amount', description='The number of messages to delete', option_type=4, required=False)])
 async def _clear(ctx, amount=5):
@@ -51,4 +52,4 @@ async def _ban(ctx, member: discord.Member, reason=None):
 async def on_slash_command_error(ctx, error):
     await ctx.send(f'An error occurred: {str(error)}')
 
-client.run('token lol')
+client.run('MTA4NTU4OTcwNDQxOTg0MDAyMA.Gkid2g.3YeKuuxgCgYgk0UssQU7N_vfyzcJOQ5UWXgXKg')
