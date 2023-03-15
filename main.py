@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord_slash import SlashCommand
 from discord_slash.utils.manage_commands import create_option
 
-client = commands.Bot(command_prefix='!')
+client = commands.Bot(command_prefix='%')
 slash = SlashCommand(client, sync_commands=True)
 
 @client.event
@@ -18,7 +18,7 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_message_delete(message):
-    log_message = f"**{message.author}** deleted a message in **{message.channel}**: \n{message.content}"
+    log_message = f"**{message.author}** deleted a message in **{message.channel}**: {message.content}"
     await client.get_channel(1009616511687741510).send(log_message)
 
 @slash.slash(name='clear', description='Clear the chat', options=[create_option(name='amount', description='The number of messages to delete', option_type=4, required=False)])
