@@ -52,4 +52,4 @@ async def _ban(ctx, member: discord.Member, reason=None):
 async def on_slash_command_error(ctx, error):
     await ctx.send(f'An error occurred: {str(error)}')
 
-client.run('MTA4NTU4OTcwNDQxOTg0MDAyMA.Gkid2g.3YeKuuxgCgYgk0UssQU7N_vfyzcJOQ5UWXgXKg')
+client.run('token lol')
