@@ -15,6 +15,7 @@ async def on_message(message):
     message_logs_channel = discord.utils.get(message.guild.channels, name='message-logs')
     if not message.author.bot:
         if message_logs_channel:
+            message.content = message.content.replace('@', '@\u200b')
             log_message = f"**{message.author}** sent a message in **{message.channel}**: \n{message.content}"
             await message_logs_channel.send(log_message)
         else:
@@ -24,11 +25,14 @@ async def on_message(message):
 @client.event
 async def on_message_edit(before, after):
     if before.content != after.content:
+        before.content = before.content.replace('@', '@\u200b')
+        after.content = after.content.replace('@', '@\u200b')
         log_message = f"**{before.author}** edited a message in **{before.channel}**: \nBefore: {before.content}\nAfter: {after.content}"
         await discord.utils.get(before.guild.channels, name='edit-logs').send(log_message)
 
 @client.event
 async def on_message_delete(message):
+    message.content = message.content.replace('@', '@\u200b')
     log_message = f"**{message.author}** deleted a message in **{message.channel}**: {message.content}"
     await discord.utils.get(message.guild.channels, name='delete-logs').send(log_message)
 
